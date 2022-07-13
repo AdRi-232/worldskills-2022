@@ -5,8 +5,6 @@ resource "proxmox_vm_qemu" "kr-edge" {
     target_node = var.proxmox_node
     pool        = var.proxmox_vm_pool
 
-    
-
     clone   = var.citemplate_debian
     cores   = 2
     sockets = 1
@@ -33,8 +31,8 @@ resource "proxmox_vm_qemu" "kr-edge" {
     ipconfig0  = "ip=10.1.1.2/30"
     ipconfig1  = "ip=210.103.5.1/26"
     nameserver = "wsc2022.kr"
-    ciuser     = var.vm_user
-    cipassword = var.vm_password
+    ciuser     = var.ciuser
+    cipassword = var.cipassword
 }
 
 resource "proxmox_vm_qemu" "fw" {
@@ -43,9 +41,7 @@ resource "proxmox_vm_qemu" "fw" {
     vmid        = "222"
     target_node = var.proxmox_node
     pool        = var.proxmox_vm_pool
-
     
-
     clone   = var.citemplate_debian
     cores   = 2
     sockets = 1
@@ -78,8 +74,8 @@ resource "proxmox_vm_qemu" "fw" {
     ipconfig1  = "ip=192.168.2.254/24"
     ipconfig2  = "ip=10.1.1.1/30,gw=10.1.1.2"
     nameserver = "wsc2022.kr"
-    ciuser     = var.vm_user
-    cipassword = var.vm_password
+    ciuser     = var.ciuser
+    cipassword = var.cipassword
 }
 
 resource "proxmox_vm_qemu" "intsrv" {
@@ -109,8 +105,8 @@ resource "proxmox_vm_qemu" "intsrv" {
     os_type    = "cloud_init"
     ipconfig0  = "ip=192.168.1.1/24,gw=192.168.1.254"
     nameserver = "wsc2022.kr"
-    ciuser     = var.vm_user
-    cipassword = var.vm_password
+    ciuser     = var.ciuser
+    cipassword = var.cipassword
 }
 
 resource "proxmox_vm_qemu" "intclnt" {
@@ -119,8 +115,6 @@ resource "proxmox_vm_qemu" "intclnt" {
     vmid        = "224"
     target_node = var.proxmox_node
     pool        = var.proxmox_vm_pool
-
-    
 
     clone   = var.citemplate_debian
     cores   = 2
@@ -142,8 +136,8 @@ resource "proxmox_vm_qemu" "intclnt" {
     os_type = "cloud_init"
     ipconfig0 = "ip=dhcp"
     nameserver = "wsc2022.kr"
-    ciuser = var.vm_user
-    cipassword = var.vm_password
+    ciuser = var.ciuser
+    cipassword = var.cipassword
 }
 
 resource "proxmox_vm_qemu" "dmzsrv" {
@@ -152,8 +146,6 @@ resource "proxmox_vm_qemu" "dmzsrv" {
     vmid        = "225"
     target_node = var.proxmox_node
     pool        = var.proxmox_vm_pool
-
-    
 
     clone   = var.citemplate_debian
     cores   = 2
@@ -175,8 +167,8 @@ resource "proxmox_vm_qemu" "dmzsrv" {
     os_type    = "cloud_init"
     ipconfig0  = "ip=192.168.2.1/24,gw=192.168.2.254"
     nameserver = "wsc2022.kr"
-    ciuser     = var.vm_user
-    cipassword = var.vm_password
+    ciuser     = var.ciuser
+    cipassword = var.cipassword
 }
 
 resource "proxmox_vm_qemu" "fr-srv" {
@@ -185,8 +177,6 @@ resource "proxmox_vm_qemu" "fr-srv" {
     vmid        = "241"
     target_node = var.proxmox_node
     pool        = var.proxmox_vm_pool
-
-    
 
     clone   = var.citemplate_debian
     cores   = 2
@@ -208,8 +198,8 @@ resource "proxmox_vm_qemu" "fr-srv" {
     os_type    = "cloud_init"
     ipconfig0  = "ip=172.16.1.3/24,gw=172.16.1.254"
     nameserver = "wsc2024.fr"
-    ciuser     = var.vm_user
-    cipassword = var.vm_password
+    ciuser     = var.ciuser
+    cipassword = var.cipassword
 }
 
 resource "proxmox_vm_qemu" "inet" {
@@ -218,8 +208,6 @@ resource "proxmox_vm_qemu" "inet" {
     vmid        = "232"
     target_node = var.proxmox_node
     pool        = var.proxmox_vm_pool
-
-    
 
     clone   = var.citemplate_debian
     cores   = 2
@@ -240,8 +228,8 @@ resource "proxmox_vm_qemu" "inet" {
 
     os_type    = "cloud_init"
     ipconfig0  = "ip=210.103.5.129/25"
-    ciuser     = var.vm_user
-    cipassword = var.vm_password
+    ciuser     = var.ciuser
+    cipassword = var.cipassword
 }
 
 resource "proxmox_vm_qemu" "isp" {
@@ -250,8 +238,6 @@ resource "proxmox_vm_qemu" "isp" {
     vmid        = "231"
     target_node = var.proxmox_node
     pool        = var.proxmox_vm_pool
-
-    
 
     clone   = var.citemplate_debian
     cores   = 2
@@ -284,6 +270,6 @@ resource "proxmox_vm_qemu" "isp" {
     ipconfig0  = "ip=210.103.5.254/25"
     ipconfig1  = "ip=210.103.5.62/25"
     ipconfig2  = "ip=210.103.5.126/25"
-    ciuser     = var.vm_user
-    cipassword = var.vm_password
+    ciuser     = var.ciuser
+    cipassword = var.cipassword
 }
