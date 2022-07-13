@@ -5,9 +5,9 @@ resource "proxmox_vm_qemu" "kr-edge" {
     target_node = var.proxmox_node
     pool        = var.proxmox_vm_pool
 
-    agent = 1
+    
 
-    clone   = "debian_cloud"
+    clone   = var.citemplate_debian
     cores   = 2
     sockets = 1
     cpu     = "host"
@@ -26,7 +26,7 @@ resource "proxmox_vm_qemu" "kr-edge" {
     disk {
         storage = var.proxmox_vm_storage
         type    = "scsi"
-        size    = "2GB"
+        size    = "2G"
     }
 
     os_type    = "cloud_init"
@@ -44,9 +44,9 @@ resource "proxmox_vm_qemu" "fw" {
     target_node = var.proxmox_node
     pool        = var.proxmox_vm_pool
 
-    agent = 1
+    
 
-    clone   = "debian_cloud"
+    clone   = var.citemplate_debian
     cores   = 2
     sockets = 1
     cpu     = "host"
@@ -70,7 +70,7 @@ resource "proxmox_vm_qemu" "fw" {
     disk {
         storage = var.proxmox_vm_storage
         type    = "scsi"
-        size    = "2GB"
+        size    = "2G"
     }
 
     os_type    = "cloud_init"
@@ -89,9 +89,7 @@ resource "proxmox_vm_qemu" "intsrv" {
     target_node = var.proxmox_node
     pool        = var.proxmox_vm_pool
 
-    agent = 1
-
-    clone   = "debian_cloud"
+    clone   = var.citemplate_debian
     cores   = 2
     sockets = 1
     cpu     = "host"
@@ -105,7 +103,7 @@ resource "proxmox_vm_qemu" "intsrv" {
     disk {
         storage = var.proxmox_vm_storage
         type    = "scsi"
-        size    = "2GB"
+        size    = "2G"
     }
 
     os_type    = "cloud_init"
@@ -122,9 +120,9 @@ resource "proxmox_vm_qemu" "intclnt" {
     target_node = var.proxmox_node
     pool        = var.proxmox_vm_pool
 
-    agent = 1
+    
 
-    clone   = "debian_cloud"
+    clone   = var.citemplate_debian
     cores   = 2
     sockets = 1
     cpu     = "host"
@@ -138,7 +136,7 @@ resource "proxmox_vm_qemu" "intclnt" {
     disk {
         storage = var.proxmox_vm_storage
         type    = "scsi"
-        size    = "2GB"
+        size    = "2G"
     }
 
     os_type = "cloud_init"
@@ -155,9 +153,9 @@ resource "proxmox_vm_qemu" "dmzsrv" {
     target_node = var.proxmox_node
     pool        = var.proxmox_vm_pool
 
-    agent = 1
+    
 
-    clone   = "debian_cloud"
+    clone   = var.citemplate_debian
     cores   = 2
     sockets = 1
     cpu     = "host"
@@ -171,7 +169,7 @@ resource "proxmox_vm_qemu" "dmzsrv" {
     disk {
         storage = var.proxmox_vm_storage
         type    = "scsi"
-        size    = "2GB"
+        size    = "2G"
     }
 
     os_type    = "cloud_init"
@@ -188,9 +186,9 @@ resource "proxmox_vm_qemu" "fr-srv" {
     target_node = var.proxmox_node
     pool        = var.proxmox_vm_pool
 
-    agent = 1
+    
 
-    clone   = "debian_cloud"
+    clone   = var.citemplate_debian
     cores   = 2
     sockets = 1
     cpu     = "host"
@@ -204,7 +202,7 @@ resource "proxmox_vm_qemu" "fr-srv" {
     disk {
         storage = var.proxmox_vm_storage
         type    = "scsi"
-        size    = "2GB"
+        size    = "2G"
     }
 
     os_type    = "cloud_init"
@@ -221,9 +219,9 @@ resource "proxmox_vm_qemu" "inet" {
     target_node = var.proxmox_node
     pool        = var.proxmox_vm_pool
 
-    agent = 1
+    
 
-    clone   = "debian_cloud"
+    clone   = var.citemplate_debian
     cores   = 2
     sockets = 1
     cpu     = "host"
@@ -237,7 +235,7 @@ resource "proxmox_vm_qemu" "inet" {
     disk {
         storage = var.proxmox_vm_storage
         type    = "scsi"
-        size    = "2GB"
+        size    = "2G"
     }
 
     os_type    = "cloud_init"
@@ -253,9 +251,9 @@ resource "proxmox_vm_qemu" "isp" {
     target_node = var.proxmox_node
     pool        = var.proxmox_vm_pool
 
-    agent = 1
+    
 
-    clone   = "debian_cloud"
+    clone   = var.citemplate_debian
     cores   = 2
     sockets = 1
     cpu     = "host"
@@ -279,7 +277,7 @@ resource "proxmox_vm_qemu" "isp" {
     disk {
         storage = var.proxmox_vm_storage
         type    = "scsi"
-        size    = "2GB"
+        size    = "2G"
     }
 
     os_type    = "cloud_init"

@@ -1,8 +1,4 @@
-
-variable "proxmox_api_url" {
-    type = string
-}
-
+# Connection details for the API
 variable "proxmox_api_token_id" {
     type = string
     sensitive = true
@@ -13,6 +9,12 @@ variable "proxmox_api_token_secret" {
     sensitive = true
 }
 
+
+# Proxmox host information
+variable "proxmox_node_ip" {
+    type = string
+}
+
 variable "proxmox_node" {
     type = string
 }
@@ -21,6 +23,12 @@ variable "proxmox_vm_pool" {
     type = string
 }
 
+variable "proxmox_vm_storage" {
+    type = string
+}
+
+
+# Virtual bridge information
 variable "proxmox_wsc2022kr_internal_bridge" {
     type = string
 }
@@ -41,15 +49,25 @@ variable "proxmox_internet_bridge" {
     type = string
 }
 
-variable "proxmox_vm_storage" {
+
+# VM cloud-init related settings
+variable "citemplate_debian" {
     type = string
 }
 
-variable "vm_user" {
+variable "citemplate_winsrv19" {
     type = string
 }
 
-variable "vm_password" {
+variable "citemplate_win10" {
+    type = string
+}
+
+variable "ciuser" {
+    type = string
+}
+
+variable "cipassword" {
     type = string
     sensitive = true
 }
