@@ -19,55 +19,52 @@ variable "proxmox_node" {
     type = string
 }
 
-variable "proxmox_vm_pool" {
+variable "proxmox_pool" {
     type = string
 }
 
-variable "proxmox_vm_storage" {
+variable "proxmox_storage" {
     type = string
 }
 
 
 # Virtual bridge information
-variable "proxmox_wsc2022kr_internal_bridge" {
-    type = string
-}
 
-variable "proxmox_wsc2022kr_dmz_bridge" {
-    type = string
+variable "proxmox_bridge" {
+    type = object({
+        wan                = string
+        wsc2022kr_internal = string
+        wsc2022kr_dmz      = string
+        wsc2022kr_edge     = string
+        wsc2024fr_internal = string
+        internet           = string
+    })
 }
-
-variable "proxmox_wsc2022kr_edge_bridge" {
-    type = string
-}
-
-variable "proxmox_wsc2024fr_internal_bridge" {
-    type = string
-}
-
-variable "proxmox_internet_bridge" {
-    type = string
-}
-
 
 # VM cloud-init related settings
-variable "citemplate_debian" {
-    type = string
+variable "citemplate" {
+    type = object({
+        debian   = string
+        winsrv19 = string
+        win10    = string
+    })
 }
 
-variable "citemplate_winsrv19" {
+variable "default_user" {
     type = string
+    default = "user"
 }
 
-variable "citemplate_win10" {
-    type = string
-}
-
-variable "ciuser" {
-    type = string
-}
-
-variable "cipassword" {
+variable "default_password" {
     type = string
     sensitive = true
+    default = "Skill39"
+}
+
+variable "lxctemplate" {
+    type = string
+}
+
+variable "wsc2022_ansible_ip" {
+    type = string
 }

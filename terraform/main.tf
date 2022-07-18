@@ -6,6 +6,10 @@ terraform {
             source  = "telmate/proxmox"
             version = "2.9.10"
         }
+        tls = {
+            source = "hashicorp/tls"
+            version = "3.4.0"
+        }
     }
 }
 
@@ -24,3 +28,5 @@ provider "proxmox" {
     #     _capturelog = ""
     # }
 }
+
+provider "tls" {}

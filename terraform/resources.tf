@@ -1,28 +1,112 @@
+resource "tls_private_key" "wsc2022_ansible_keys" {
+    algorithm = "RSA"
+    rsa_bits = 4096
+}
+
+resource "proxmox_lxc" "wsc2022_ansible" {
+    target_node  = var.proxmox_node
+    hostname     = "wsc2022-ansible"
+    description  = "This machine can communicate with every network inside of the PVE node"
+    pool         = "WSC2022"
+    vmid         = 201
+    ostemplate   = "local:vztmpl/${var.lxctemplate}"
+    password     = var.default_password
+    unprivileged = true
+    start        = true
+
+    ssh_public_keys = <<EOF
+    ${file("~/.ssh/id_rsa.pub")}
+    EOF
+
+    rootfs {
+        storage = var.proxmox_storage
+        size    = "4G"
+    }
+
+    network {
+        name   = "eth0"
+        bridge = var.proxmox_bridge.wan 
+        ip     = "192.168.1.253/24"
+        gw     = "192.168.1.1"
+    }
+
+    network {
+        name   = "eth1"
+        bridge = var.proxmox_bridge.wsc2022kr_internal
+        ip     = "192.168.10.10/24"
+    }
+
+    network {
+        name   = "eth2"
+        bridge = var.proxmox_bridge.wsc2022kr_dmz
+        ip     = "192.168.20.10/24"
+    }
+
+    network {
+        name   = "eth3"
+        bridge = var.proxmox_bridge.wsc2024fr_internal
+        ip     = "172.16.1.10/24"
+    }
+
+    network {
+        name   = "eth4"
+        bridge = var.proxmox_bridge.internet
+        ip     = "210.103.5.10/26"
+    }
+
+    network {
+        name   = "eth5"
+        bridge = var.proxmox_bridge.internet
+        ip     = "210.103.5.74/26"
+    }
+
+    network {
+        name   = "eth6"
+        bridge = var.proxmox_bridge.internet
+        ip     = "210.103.5.138/25"
+    }
+
+    provisioner "remote-exec" {
+
+        connection {
+            type = "ssh"
+            host = var.wsc2022_ansible_ip
+            user = "root"
+            private_key = "${file("~/.ssh/id_rsa")}"
+        }
+        inline = [
+            "tee -a /root/.ssh/id_rsa << END\n${tls_private_key.wsc2022_ansible_keys.private_key_pem}END",
+            "chmod 600 /root/.ssh/id_rsa"
+        ]
+    }
+
+}
+
 resource "proxmox_vm_qemu" "kr-edge" {
     name        = "kr-edge"
     desc        = "Wordskills 2022 Korea Edge Router"
     vmid        = "221"
     target_node = var.proxmox_node
-    pool        = var.proxmox_vm_pool
+    pool        = var.proxmox_pool
 
-    clone   = var.citemplate_debian
+    clone   = var.citemplate.debian
     cores   = 2
     sockets = 1
     cpu     = "host"
     memory  = 1024
 
     network {
-        bridge = var.proxmox_wsc2022kr_edge_bridge
+        bridge = var.proxmox_bridge.wsc2022kr_edge
         model  = "virtio"
     }
 
     network {
-        bridge = var.proxmox_internet_bridge
+        bridge = var.proxmox_bridge.internet
         model  = "virtio"
     }
 
     disk {
-        storage = var.proxmox_vm_storage
+        storage = var.proxmox_storage
         type    = "scsi"
         size    = "2G"
     }
@@ -31,8 +115,12 @@ resource "proxmox_vm_qemu" "kr-edge" {
     ipconfig0  = "ip=10.1.1.2/30"
     ipconfig1  = "ip=210.103.5.1/26"
     nameserver = "wsc2022.kr"
-    ciuser     = var.ciuser
-    cipassword = var.cipassword
+    ciuser     = var.default_user
+    cipassword = var.default_password
+
+    sshkeys = <<EOF
+    ${tls_private_key.wsc2022_ansible_keys.public_key_openssh}
+    EOF
 }
 
 resource "proxmox_vm_qemu" "fw" {
@@ -40,42 +128,48 @@ resource "proxmox_vm_qemu" "fw" {
     desc        = "Wordskills 2022 Korea Firewall"
     vmid        = "222"
     target_node = var.proxmox_node
-    pool        = var.proxmox_vm_pool
+    pool        = var.proxmox_pool
     
-    clone   = var.citemplate_debian
+    clone   = var.citemplate.debian
     cores   = 2
     sockets = 1
     cpu     = "host"
     memory  = 1024
 
     network {
-        bridge = var.proxmox_wsc2022kr_internal_bridge
+        bridge = var.proxmox_bridge.wsc2022kr_internal
         model  = "virtio"
     }
 
     network {
-        bridge = var.proxmox_wsc2022kr_dmz_bridge
+        bridge = var.proxmox_bridge.wsc2022kr_dmz
         model  = "virtio"
     }
 
     network {
-        bridge = var.proxmox_wsc2022kr_edge_bridge
+        bridge = var.proxmox_bridge.wsc2022kr_edge
         model  = "virtio"
     }
 
     disk {
-        storage = var.proxmox_vm_storage
+        storage = var.proxmox_storage
         type    = "scsi"
         size    = "2G"
     }
 
     os_type    = "cloud_init"
-    ipconfig0  = "ip=192.168.1.254/24"
-    ipconfig1  = "ip=192.168.2.254/24"
+    ipconfig0  = "ip=192.168.10.254/24"
+    ipconfig1  = "ip=192.168.20.254/24"
     ipconfig2  = "ip=10.1.1.1/30,gw=10.1.1.2"
     nameserver = "wsc2022.kr"
-    ciuser     = var.ciuser
-    cipassword = var.cipassword
+    ciuser     = var.default_user
+    cipassword = var.default_password
+
+    
+    sshkeys = <<EOF
+    ${tls_private_key.wsc2022_ansible_keys.public_key_openssh}
+    EOF
+
 }
 
 resource "proxmox_vm_qemu" "intsrv" {
@@ -83,30 +177,35 @@ resource "proxmox_vm_qemu" "intsrv" {
     desc        = "Wordskills 2022 Korea Internal Server"
     vmid        = "223"
     target_node = var.proxmox_node
-    pool        = var.proxmox_vm_pool
+    pool        = var.proxmox_pool
 
-    clone   = var.citemplate_debian
+    clone   = var.citemplate.debian
     cores   = 2
     sockets = 1
     cpu     = "host"
     memory  = 1024
 
     network {
-        bridge = var.proxmox_wsc2022kr_internal_bridge
+        bridge = var.proxmox_bridge.wsc2022kr_internal
         model  = "virtio"
     }
 
     disk {
-        storage = var.proxmox_vm_storage
+        storage = var.proxmox_storage
         type    = "scsi"
         size    = "2G"
     }
 
     os_type    = "cloud_init"
-    ipconfig0  = "ip=192.168.1.1/24,gw=192.168.1.254"
+    ipconfig0  = "ip=192.168.10.1/24,gw=192.168.10.254"
     nameserver = "wsc2022.kr"
-    ciuser     = var.ciuser
-    cipassword = var.cipassword
+    ciuser     = var.default_user
+    cipassword = var.default_password
+
+    sshkeys = <<EOF
+    ${tls_private_key.wsc2022_ansible_keys.public_key_openssh}
+    EOF
+
 }
 
 resource "proxmox_vm_qemu" "intclnt" {
@@ -114,21 +213,21 @@ resource "proxmox_vm_qemu" "intclnt" {
     desc        = "Wordskills 2022 Korea Internal Client"
     vmid        = "224"
     target_node = var.proxmox_node
-    pool        = var.proxmox_vm_pool
+    pool        = var.proxmox_pool
 
-    clone   = var.citemplate_debian
+    clone   = var.citemplate.debian
     cores   = 2
     sockets = 1
     cpu     = "host"
     memory  = 1024
 
     network {
-        bridge = var.proxmox_wsc2022kr_internal_bridge
+        bridge = var.proxmox_bridge.wsc2022kr_internal
         model  = "virtio"
     }
 
     disk {
-        storage = var.proxmox_vm_storage
+        storage = var.proxmox_storage
         type    = "scsi"
         size    = "2G"
     }
@@ -136,8 +235,13 @@ resource "proxmox_vm_qemu" "intclnt" {
     os_type = "cloud_init"
     ipconfig0 = "ip=dhcp"
     nameserver = "wsc2022.kr"
-    ciuser = var.ciuser
-    cipassword = var.cipassword
+    ciuser = var.default_user
+    cipassword = var.default_password
+        
+    sshkeys = <<EOF
+    ${tls_private_key.wsc2022_ansible_keys.public_key_openssh}
+    EOF
+    
 }
 
 resource "proxmox_vm_qemu" "dmzsrv" {
@@ -145,30 +249,35 @@ resource "proxmox_vm_qemu" "dmzsrv" {
     desc        = "Wordskills 2022 Korea DMZ Server"
     vmid        = "225"
     target_node = var.proxmox_node
-    pool        = var.proxmox_vm_pool
+    pool        = var.proxmox_pool
 
-    clone   = var.citemplate_debian
+    clone   = var.citemplate.debian
     cores   = 2
     sockets = 1
     cpu     = "host"
     memory  = 1024
 
     network {
-        bridge = var.proxmox_wsc2022kr_dmz_bridge
+        bridge = var.proxmox_bridge.wsc2022kr_dmz
         model  = "virtio"
     }
 
     disk {
-        storage = var.proxmox_vm_storage
+        storage = var.proxmox_storage
         type    = "scsi"
         size    = "2G"
     }
 
     os_type    = "cloud_init"
-    ipconfig0  = "ip=192.168.2.1/24,gw=192.168.2.254"
+    ipconfig0  = "ip=192.168.20.1/24,gw=192.168.20.254"
     nameserver = "wsc2022.kr"
-    ciuser     = var.ciuser
-    cipassword = var.cipassword
+    ciuser     = var.default_user
+    cipassword = var.default_password
+        
+    sshkeys = <<EOF
+    ${tls_private_key.wsc2022_ansible_keys.public_key_openssh}
+    EOF
+    
 }
 
 resource "proxmox_vm_qemu" "fr-srv" {
@@ -176,21 +285,21 @@ resource "proxmox_vm_qemu" "fr-srv" {
     desc        = "Wordskills 2024 France Server"
     vmid        = "241"
     target_node = var.proxmox_node
-    pool        = var.proxmox_vm_pool
+    pool        = var.proxmox_pool
 
-    clone   = var.citemplate_debian
+    clone   = var.citemplate.debian
     cores   = 2
     sockets = 1
     cpu     = "host"
     memory  = 1024
 
     network {
-        bridge = var.proxmox_wsc2024fr_internal_bridge
+        bridge = var.proxmox_bridge.wsc2024fr_internal
         model  = "virtio"
     }
 
     disk {
-        storage = var.proxmox_vm_storage
+        storage = var.proxmox_storage
         type    = "scsi"
         size    = "2G"
     }
@@ -198,8 +307,13 @@ resource "proxmox_vm_qemu" "fr-srv" {
     os_type    = "cloud_init"
     ipconfig0  = "ip=172.16.1.3/24,gw=172.16.1.254"
     nameserver = "wsc2024.fr"
-    ciuser     = var.ciuser
-    cipassword = var.cipassword
+    ciuser     = var.default_user
+    cipassword = var.default_password
+        
+    sshkeys = <<EOF
+    ${tls_private_key.wsc2022_ansible_keys.public_key_openssh}
+    EOF
+    
 }
 
 resource "proxmox_vm_qemu" "inet" {
@@ -207,29 +321,34 @@ resource "proxmox_vm_qemu" "inet" {
     desc        = "Internet"
     vmid        = "232"
     target_node = var.proxmox_node
-    pool        = var.proxmox_vm_pool
+    pool        = var.proxmox_pool
 
-    clone   = var.citemplate_debian
+    clone   = var.citemplate.debian
     cores   = 2
     sockets = 1
     cpu     = "host"
     memory  = 1024
 
     network {
-        bridge = var.proxmox_internet_bridge
+        bridge = var.proxmox_bridge.internet
         model  = "virtio"
     }
 
     disk {
-        storage = var.proxmox_vm_storage
+        storage = var.proxmox_storage
         type    = "scsi"
         size    = "2G"
     }
 
     os_type    = "cloud_init"
     ipconfig0  = "ip=210.103.5.129/25"
-    ciuser     = var.ciuser
-    cipassword = var.cipassword
+    ciuser     = var.default_user
+    cipassword = var.default_password
+
+    sshkeys = <<EOF
+    ${tls_private_key.wsc2022_ansible_keys.public_key_openssh}
+    EOF
+    
 }
 
 resource "proxmox_vm_qemu" "isp" {
@@ -237,39 +356,44 @@ resource "proxmox_vm_qemu" "isp" {
     desc        = "ISP"
     vmid        = "231"
     target_node = var.proxmox_node
-    pool        = var.proxmox_vm_pool
+    pool        = var.proxmox_pool
 
-    clone   = var.citemplate_debian
+    clone   = var.citemplate.debian
     cores   = 2
     sockets = 1
     cpu     = "host"
     memory  = 1024
 
     network {
-        bridge = var.proxmox_internet_bridge
+        bridge = var.proxmox_bridge.internet
         model  = "virtio"
     }
 
     network {
-        bridge = var.proxmox_internet_bridge
+        bridge = var.proxmox_bridge.internet
         model  = "virtio"
     }
 
     network {
-        bridge = var.proxmox_internet_bridge
+        bridge = var.proxmox_bridge.internet
         model  = "virtio"
     }
 
     disk {
-        storage = var.proxmox_vm_storage
+        storage = var.proxmox_storage
         type    = "scsi"
         size    = "2G"
     }
 
     os_type    = "cloud_init"
     ipconfig0  = "ip=210.103.5.254/25"
-    ipconfig1  = "ip=210.103.5.62/25"
-    ipconfig2  = "ip=210.103.5.126/25"
-    ciuser     = var.ciuser
-    cipassword = var.cipassword
+    ipconfig1  = "ip=210.103.5.62/26"
+    ipconfig2  = "ip=210.103.5.126/26"
+    ciuser     = var.default_user
+    cipassword = var.default_password
+    
+    sshkeys = <<EOF
+    ${tls_private_key.wsc2022_ansible_keys.public_key_openssh}
+    EOF
+    
 }
