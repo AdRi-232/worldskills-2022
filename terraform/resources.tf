@@ -18,6 +18,10 @@ resource "proxmox_lxc" "wsc2022_ansible" {
     ${file("~/.ssh/id_rsa.pub")}
     EOF
 
+    features {
+        nesting = true
+    }
+
     rootfs {
         storage = var.proxmox_storage
         size    = "4G"

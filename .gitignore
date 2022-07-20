@@ -35,3 +35,6 @@ terraform.rc
 
 # Ignore dependency lock file
 .terraform.lock.hcl
+
+#Ignore Proxmox provider log files
+terraform-plugin-proxmox.log
