@@ -9,7 +9,6 @@ variable "proxmox_api_token_secret" {
     sensitive = true
 }
 
-
 # Proxmox host information
 variable "proxmox_node_ip" {
     type = string
@@ -25,11 +24,10 @@ variable "proxmox_pool" {
 
 variable "proxmox_storage" {
     type = string
+    default = "local-lvm"
 }
 
-
 # Virtual bridge information
-
 variable "proxmox_bridge" {
     type = object({
         wan                = string
@@ -63,6 +61,7 @@ variable "default_password" {
 
 variable "lxctemplate" {
     type = string
+    default = "debian-11-standard_11.3-1_amd64.tar.zst"
 }
 
 variable "wsc2022_ansible_ip" {

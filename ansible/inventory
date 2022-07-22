@@ -1,0 +1,33 @@
+[ansible]
+; WSC2022-ANSIBLE
+192.168.1.253 ansible_user=root
+
+[linux]
+; KR-EDGE
+10.1.1.2
+; FW
+192.168.10.254
+; INTSRV
+192.168.10.1
+; DMZSRV
+192.168.20.1
+; FRSRV
+172.16.1.3
+; INET
+10.3.3.2
+; ISP
+10.3.3.1
+
+[linux:vars]
+ansible_user=user
+
+[router]
+; KR-EDGE
+10.1.1.2
+; FW
+192.168.10.254
+; ISP
+10.3.3.1
+
+[router:vars]
+ansible_user=user

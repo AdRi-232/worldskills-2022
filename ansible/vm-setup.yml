@@ -1,0 +1,4 @@
+- hosts: router
+  become: true
+  roles:
+    - ipv4_forwarding

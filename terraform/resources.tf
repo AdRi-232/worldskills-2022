@@ -6,7 +6,6 @@ resource "tls_private_key" "wsc2022_ansible_keys" {
 resource "proxmox_lxc" "wsc2022_ansible" {
     target_node  = var.proxmox_node
     hostname     = "wsc2022-ansible"
-    description  = "This machine can communicate with every network inside of the PVE node"
     pool         = "WSC2022"
     vmid         = 201
     ostemplate   = "local:vztmpl/${var.lxctemplate}"
@@ -55,19 +54,19 @@ resource "proxmox_lxc" "wsc2022_ansible" {
     network {
         name   = "eth4"
         bridge = var.proxmox_bridge.internet
-        ip     = "210.103.5.10/26"
+        ip     = "10.1.1.10/24"
     }
 
     network {
         name   = "eth5"
         bridge = var.proxmox_bridge.internet
-        ip     = "210.103.5.74/26"
+        ip     = "10.2.2.10/24"
     }
 
     network {
         name   = "eth6"
         bridge = var.proxmox_bridge.internet
-        ip     = "210.103.5.138/25"
+        ip     = "10.3.3.10/24"
     }
 
     provisioner "remote-exec" {
@@ -116,8 +115,8 @@ resource "proxmox_vm_qemu" "kr-edge" {
     }
 
     os_type    = "cloud_init"
-    ipconfig0  = "ip=10.1.1.2/30"
-    ipconfig1  = "ip=210.103.5.1/26"
+    ipconfig0  = "ip=192.168.100.254/24"
+    ipconfig1  = "ip=10.1.1.2/24"
     nameserver = "wsc2022.kr"
     ciuser     = var.default_user
     cipassword = var.default_password
@@ -164,7 +163,7 @@ resource "proxmox_vm_qemu" "fw" {
     os_type    = "cloud_init"
     ipconfig0  = "ip=192.168.10.254/24"
     ipconfig1  = "ip=192.168.20.254/24"
-    ipconfig2  = "ip=10.1.1.1/30,gw=10.1.1.2"
+    ipconfig2  = "ip=192.168.100.1,gw=192.168.100.254"
     nameserver = "wsc2022.kr"
     ciuser     = var.default_user
     cipassword = var.default_password
@@ -345,7 +344,7 @@ resource "proxmox_vm_qemu" "inet" {
     }
 
     os_type    = "cloud_init"
-    ipconfig0  = "ip=210.103.5.129/25"
+    ipconfig0  = "ip=10.3.3.2/24"
     ciuser     = var.default_user
     cipassword = var.default_password
 
@@ -383,6 +382,11 @@ resource "proxmox_vm_qemu" "isp" {
         model  = "virtio"
     }
 
+    network {
+        bridge = var.proxmox_bridge.wan
+        model  = "virtio"
+    }
+
     disk {
         storage = var.proxmox_storage
         type    = "scsi"
@@ -390,9 +394,10 @@ resource "proxmox_vm_qemu" "isp" {
     }
 
     os_type    = "cloud_init"
-    ipconfig0  = "ip=210.103.5.254/25"
-    ipconfig1  = "ip=210.103.5.62/26"
-    ipconfig2  = "ip=210.103.5.126/26"
+    ipconfig0  = "ip=10.1.1.1/24"
+    ipconfig1  = "ip=10.2.2.1/24"
+    ipconfig2  = "ip=10.3.3.1/24"
+    ipconfig3  = "ip=dhcp"
     ciuser     = var.default_user
     cipassword = var.default_password
     
