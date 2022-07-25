@@ -67,3 +67,8 @@ variable "lxctemplate" {
 variable "wsc2022_ansible_ip" {
     type = string
 }
+
+variable "windows_server_vms" {
+    description = "List of Windows-based VMs"
+    type = map
+}
