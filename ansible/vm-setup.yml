@@ -2,3 +2,8 @@
   become: true
   roles:
     - ipv4_forwarding
+
+- hosts: linux
+  become: true
+  roles:
+    - apt_basic_packages

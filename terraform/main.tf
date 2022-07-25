@@ -7,8 +7,16 @@ terraform {
             version = "2.9.10"
         }
         tls = {
-            source = "hashicorp/tls"
+            source  = "hashicorp/tls"
             version = "3.4.0"
+        }
+        cloudinit = {
+            source  = "hashicorp/cloudinit"
+            version = "2.2.0"
+        }
+        local = {
+            source  = "hashicorp/local"
+            version = "2.2.3"
         }
     }
 }
@@ -31,3 +39,7 @@ provider "proxmox" {
 }
 
 provider "tls" {}
+
+provider "cloudinit" {}
+
+provider "local" {}

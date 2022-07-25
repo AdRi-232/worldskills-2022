@@ -1,0 +1,23 @@
+- name: Ensure installed packages are updated
+  apt:
+    update_cache: yes
+    upgrade: "yes"
+
+- name: Ensure required packages are installed
+  apt:
+    name:
+      - smbclient
+      - curl
+      - lynx
+      - dnsutils
+      - ldap_utils
+      - ftp
+      - lftp
+      - wget
+      - ssh
+      - nfs-common
+      - rsync
+      - telnet
+      - traceroute
+      - tcptraceroute
+    state: latest

@@ -29,7 +29,7 @@ resource "proxmox_lxc" "wsc2022_ansible" {
     network {
         name   = "eth0"
         bridge = var.proxmox_bridge.wan 
-        ip     = "192.168.1.253/24"
+        ip     = "${var.wsc2022_ansible_ip}/24"
         gw     = "192.168.1.1"
     }
 
@@ -116,8 +116,8 @@ resource "proxmox_vm_qemu" "kr-edge" {
 
     os_type    = "cloud_init"
     ipconfig0  = "ip=192.168.100.254/24"
-    ipconfig1  = "ip=10.1.1.2/24"
-    nameserver = "wsc2022.kr"
+    ipconfig1  = "ip=10.1.1.2/24,gw=10.1.1.1"
+    searchdomain = "wsc2022.kr"
     ciuser     = var.default_user
     cipassword = var.default_password
 
@@ -163,8 +163,8 @@ resource "proxmox_vm_qemu" "fw" {
     os_type    = "cloud_init"
     ipconfig0  = "ip=192.168.10.254/24"
     ipconfig1  = "ip=192.168.20.254/24"
-    ipconfig2  = "ip=192.168.100.1,gw=192.168.100.254"
-    nameserver = "wsc2022.kr"
+    ipconfig2  = "ip=192.168.100.1/24,gw=192.168.100.254"
+    searchdomain = "wsc2022.kr"
     ciuser     = var.default_user
     cipassword = var.default_password
 
@@ -201,7 +201,7 @@ resource "proxmox_vm_qemu" "intsrv" {
 
     os_type    = "cloud_init"
     ipconfig0  = "ip=192.168.10.1/24,gw=192.168.10.254"
-    nameserver = "wsc2022.kr"
+    searchdomain = "wsc2022.kr"
     ciuser     = var.default_user
     cipassword = var.default_password
 
@@ -236,8 +236,8 @@ resource "proxmox_vm_qemu" "intclnt" {
     }
 
     os_type = "cloud_init"
-    ipconfig0 = "ip=dhcp"
-    nameserver = "wsc2022.kr"
+    ipconfig0 = "ip=192.168.10.100/24,gw=192.168.10.254"
+    searchdomain = "wsc2022.kr"
     ciuser = var.default_user
     cipassword = var.default_password
         
@@ -273,7 +273,7 @@ resource "proxmox_vm_qemu" "dmzsrv" {
 
     os_type    = "cloud_init"
     ipconfig0  = "ip=192.168.20.1/24,gw=192.168.20.254"
-    nameserver = "wsc2022.kr"
+    searchdomain = "wsc2022.kr"
     ciuser     = var.default_user
     cipassword = var.default_password
         
@@ -286,7 +286,7 @@ resource "proxmox_vm_qemu" "dmzsrv" {
 resource "proxmox_vm_qemu" "fr-srv" {
     name        = "fr-srv"
     desc        = "Wordskills 2024 France Server"
-    vmid        = "241"
+    vmid        = "244"
     target_node = var.proxmox_node
     pool        = var.proxmox_pool
 
@@ -309,7 +309,7 @@ resource "proxmox_vm_qemu" "fr-srv" {
 
     os_type    = "cloud_init"
     ipconfig0  = "ip=172.16.1.3/24,gw=172.16.1.254"
-    nameserver = "wsc2024.fr"
+    searchdomain = "wsc2024.fr"
     ciuser     = var.default_user
     cipassword = var.default_password
         
@@ -344,7 +344,7 @@ resource "proxmox_vm_qemu" "inet" {
     }
 
     os_type    = "cloud_init"
-    ipconfig0  = "ip=10.3.3.2/24"
+    ipconfig0  = "ip=10.3.3.2/24,gw=10.3.3.1"
     ciuser     = var.default_user
     cipassword = var.default_password
 

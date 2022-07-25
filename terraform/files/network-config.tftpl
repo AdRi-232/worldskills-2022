@@ -1,0 +1,8 @@
+#ps1
+%{ for interface in network }
+New-NetIPAddress -InterfaceIndex ${interface.index} `
+                 -IPAddress ${interface.ip} `
+                 -PrefixLength 24 %{ if interface.gw != "" ~}`
+                 -DefaultGateway ${interface.gw}
+                 %{ endif ~}
+%{ endfor ~}
