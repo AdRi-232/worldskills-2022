@@ -1,6 +1,9 @@
 set_hostname: ${hostname}
 
-write_files:
-  - path: C:\ProgramData\ssh\administrators_authorized_keys
-    content: |
-      ${sshkeys}
+users:
+  - name: ansible
+    gecos: Ansible Administration User
+    primary_group: Administrators
+    passwd: ${ansible_password}
+    ssh_authorized_keys:
+      - ${ansible_sshkey}
