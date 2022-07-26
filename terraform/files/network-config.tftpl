@@ -1,7 +1,7 @@
 #ps1
 
-New-NetIPAddress -InterfaceIndex ${ id } `
-                 -IPAddress ${ ip } `
+New-NetIPAddress -InterfaceIndex ${id} `
+                 -IPAddress ${ip} `
                  -PrefixLength 24 %{ if gw != "" ~}`
-                 -DefaultGateway ${ gw ~}
+                 -DefaultGateway ${gw}
                  %{ endif ~}

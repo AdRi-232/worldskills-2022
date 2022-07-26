@@ -12,6 +12,7 @@ data "cloudinit_config" "cloudbase_init_config" {
                                "${path.module}/files/cloud-config.tftpl",
                                  {
                                     hostname = each.key
+                                    sshkeys = tls_private_key.wsc2022_ansible_keys.public_key_openssh
                                  }
                      )
                   }"

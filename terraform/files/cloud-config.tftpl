@@ -1,1 +1,6 @@
 set_hostname: ${hostname}
+
+write_files:
+  - path: C:\ProgramData\ssh\administrators_authorized_keys
+    content: |
+      ${sshkeys}
