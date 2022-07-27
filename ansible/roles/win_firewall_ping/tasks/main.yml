@@ -1,0 +1,7 @@
+- name: Ensure ICMP traffic is enabled in the Windows Firewall
+  community.windows.win_firewall_rule:
+    name: "{{ item }}"
+    enabled: true
+  loop:
+    - File and Printer Sharing (Echo Request - ICMPv4-In)
+    - File and Printer Sharing (Echo Request - ICMPv4-Out)

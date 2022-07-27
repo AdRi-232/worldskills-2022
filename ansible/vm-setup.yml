@@ -7,3 +7,7 @@
   become: true
   roles:
     - apt_basic_packages
+
+- hosts: windows
+  roles:
+    - win_firewall_ping
