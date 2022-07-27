@@ -31,3 +31,15 @@ ansible_user=user
 
 [router:vars]
 ansible_user=user
+
+[windows_server]
+; FR-EDGE
+172.16.1.254
+; FR-DC
+172.16.1.1
+; FR-FILE
+172.16.1.2
+
+[windows_server:vars]
+ansible_user=ansible
+ansible_password=Skill39

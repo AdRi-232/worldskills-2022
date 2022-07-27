@@ -1,0 +1,5 @@
+- hosts: ansible
+  become: true
+  roles:
+    - geerlingguy.ansible
+    - apt_git

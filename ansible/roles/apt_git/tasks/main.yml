@@ -1,0 +1,9 @@
+- name: Ensure installed packages are updated
+  apt:
+    update_cache: yes
+    upgrade: "yes"
+
+- name: Ensure git is installed
+  apt:
+    name: git
+    state: latest
