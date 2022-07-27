@@ -1,0 +1,11 @@
+- name: Ensure installed packages are updated
+  apt:
+    update_cache: yes
+    upgrade: "yes"
+
+- name: Ensure git and sshpass packages are installed
+  apt:
+    name:
+      - git
+      - sshpass
+    state: latest
