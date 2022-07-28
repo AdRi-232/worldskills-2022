@@ -3,6 +3,21 @@
   roles:
     - ipv4_forwarding
 
+- hosts: router-l1
+  become: true
+  roles:
+    - nftables_nat
+
+- hosts: router-l2
+  become: true
+  roles:
+    - nftables_nat
+
+- hosts: router-l3
+  become: true
+  roles:
+    - nftables_nat
+
 - hosts: linux
   become: true
   roles:

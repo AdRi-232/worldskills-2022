@@ -1,5 +1,5 @@
 - name: Ensure IP forwarding is enabled
-  sysctl:
+  ansible.posix.sysctl:
     name: net.ipv4.ip_forward
     value: "1"
     sysctl_set: yes

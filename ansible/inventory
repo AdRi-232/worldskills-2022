@@ -21,13 +21,22 @@
 [linux:vars]
 ansible_user=user
 
-[router]
-; KR-EDGE
-10.1.1.2
-; FW
-192.168.10.254
+[router_l1]
 ; ISP
 10.3.3.1
+
+[router_l2]
+; KR-EDGE
+10.1.1.2
+
+[router_l3]
+; FW
+192.168.10.254
+
+[router:children]
+router_l1
+router_l2
+router_l3
 
 [router:vars]
 ansible_user=user
