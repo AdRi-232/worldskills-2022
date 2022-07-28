@@ -16,10 +16,10 @@
               oifname eth0 masquerade
           }
       }
-  register: nftables_nat_result
+  register: nftables_conf
 
 - name: Restart the nftables service
   service:
     name: nftables
     state: restarted
-    when: nftables_nat_result.changed
+  when: nftables_conf.changed
