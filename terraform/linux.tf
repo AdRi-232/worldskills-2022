@@ -99,12 +99,12 @@ resource "proxmox_vm_qemu" "kr-edge" {
     memory  = 1024
 
     network {
-        bridge = var.proxmox_bridge.wsc2022kr_edge
+        bridge = var.proxmox_bridge.internet
         model  = "virtio"
     }
 
     network {
-        bridge = var.proxmox_bridge.internet
+        bridge = var.proxmox_bridge.wsc2022kr_edge
         model  = "virtio"
     }
 
@@ -114,12 +114,12 @@ resource "proxmox_vm_qemu" "kr-edge" {
         size    = "2G"
     }
 
-    os_type    = "cloud_init"
-    ipconfig0  = "ip=192.168.100.254/24"
-    ipconfig1  = "ip=10.1.1.2/24,gw=10.1.1.1"
+    os_type      = "cloud_init"
+    ipconfig0    = "ip=10.1.1.2/24,gw=10.1.1.1"
+    ipconfig1    = "ip=192.168.100.254/24"
     searchdomain = "wsc2022.kr"
-    ciuser     = var.default_user
-    cipassword = var.default_password
+    ciuser       = var.default_user
+    cipassword   = var.default_password
 
     sshkeys = <<EOF
     ${tls_private_key.wsc2022_ansible_keys.public_key_openssh}
@@ -140,6 +140,11 @@ resource "proxmox_vm_qemu" "fw" {
     memory  = 1024
 
     network {
+        bridge = var.proxmox_bridge.wsc2022kr_edge
+        model  = "virtio"
+    }
+
+    network {
         bridge = var.proxmox_bridge.wsc2022kr_internal
         model  = "virtio"
     }
@@ -149,24 +154,19 @@ resource "proxmox_vm_qemu" "fw" {
         model  = "virtio"
     }
 
-    network {
-        bridge = var.proxmox_bridge.wsc2022kr_edge
-        model  = "virtio"
-    }
-
     disk {
         storage = var.proxmox_storage
         type    = "scsi"
         size    = "2G"
     }
 
-    os_type    = "cloud_init"
-    ipconfig0  = "ip=192.168.10.254/24"
-    ipconfig1  = "ip=192.168.20.254/24"
-    ipconfig2  = "ip=192.168.100.1/24,gw=192.168.100.254"
+    os_type      = "cloud_init"
+    ipconfig0    = "ip=192.168.100.1/24,gw=192.168.100.254"
+    ipconfig1    = "ip=192.168.10.254/24"
+    ipconfig2    = "ip=192.168.20.254/24"
     searchdomain = "wsc2022.kr"
-    ciuser     = var.default_user
-    cipassword = var.default_password
+    ciuser       = var.default_user
+    cipassword   = var.default_password
 
     
     sshkeys = <<EOF
@@ -199,11 +199,11 @@ resource "proxmox_vm_qemu" "intsrv" {
         size    = "2G"
     }
 
-    os_type    = "cloud_init"
-    ipconfig0  = "ip=192.168.10.1/24,gw=192.168.10.254"
+    os_type      = "cloud_init"
+    ipconfig0    = "ip=192.168.10.1/24,gw=192.168.10.254"
     searchdomain = "wsc2022.kr"
-    ciuser     = var.default_user
-    cipassword = var.default_password
+    ciuser       = var.default_user
+    cipassword   = var.default_password
 
     sshkeys = <<EOF
     ${tls_private_key.wsc2022_ansible_keys.public_key_openssh}
@@ -235,11 +235,11 @@ resource "proxmox_vm_qemu" "intclnt" {
         size    = "2G"
     }
 
-    os_type = "cloud_init"
-    ipconfig0 = "ip=192.168.10.100/24,gw=192.168.10.254"
+    os_type      = "cloud_init"
+    ipconfig0    = "ip=192.168.10.100/24,gw=192.168.10.254"
     searchdomain = "wsc2022.kr"
-    ciuser = var.default_user
-    cipassword = var.default_password
+    ciuser       = var.default_user
+    cipassword   = var.default_password
         
     sshkeys = <<EOF
     ${tls_private_key.wsc2022_ansible_keys.public_key_openssh}
@@ -271,11 +271,11 @@ resource "proxmox_vm_qemu" "dmzsrv" {
         size    = "2G"
     }
 
-    os_type    = "cloud_init"
-    ipconfig0  = "ip=192.168.20.1/24,gw=192.168.20.254"
+    os_type      = "cloud_init"
+    ipconfig0    = "ip=192.168.20.1/24,gw=192.168.20.254"
     searchdomain = "wsc2022.kr"
-    ciuser     = var.default_user
-    cipassword = var.default_password
+    ciuser       = var.default_user
+    cipassword   = var.default_password
         
     sshkeys = <<EOF
     ${tls_private_key.wsc2022_ansible_keys.public_key_openssh}
@@ -307,11 +307,11 @@ resource "proxmox_vm_qemu" "fr-srv" {
         size    = "2G"
     }
 
-    os_type    = "cloud_init"
-    ipconfig0  = "ip=172.16.1.3/24,gw=172.16.1.254"
+    os_type      = "cloud_init"
+    ipconfig0    = "ip=172.16.1.3/24,gw=172.16.1.254"
     searchdomain = "wsc2024.fr"
-    ciuser     = var.default_user
-    cipassword = var.default_password
+    ciuser       = var.default_user
+    cipassword   = var.default_password
         
     sshkeys = <<EOF
     ${tls_private_key.wsc2022_ansible_keys.public_key_openssh}
@@ -368,22 +368,22 @@ resource "proxmox_vm_qemu" "isp" {
     memory  = 1024
 
     network {
-        bridge = var.proxmox_bridge.internet
-        model  = "virtio"
-    }
-
-    network {
-        bridge = var.proxmox_bridge.internet
-        model  = "virtio"
-    }
-
-    network {
-        bridge = var.proxmox_bridge.internet
-        model  = "virtio"
-    }
-
-    network {
         bridge = var.proxmox_bridge.wan
+        model  = "virtio"
+    }
+
+    network {
+        bridge = var.proxmox_bridge.internet
+        model  = "virtio"
+    }
+
+    network {
+        bridge = var.proxmox_bridge.internet
+        model  = "virtio"
+    }
+
+    network {
+        bridge = var.proxmox_bridge.internet
         model  = "virtio"
     }
 
@@ -394,10 +394,10 @@ resource "proxmox_vm_qemu" "isp" {
     }
 
     os_type    = "cloud_init"
-    ipconfig0  = "ip=10.1.1.1/24"
-    ipconfig1  = "ip=10.2.2.1/24"
-    ipconfig2  = "ip=10.3.3.1/24"
-    ipconfig3  = "ip=dhcp"
+    ipconfig0  = "ip=dhcp"
+    ipconfig1  = "ip=10.1.1.1/24"
+    ipconfig2  = "ip=10.2.2.1/24"
+    ipconfig3  = "ip=10.3.3.1/24"
     ciuser     = var.default_user
     cipassword = var.default_password
     

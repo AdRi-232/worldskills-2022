@@ -2,6 +2,7 @@
   apt:
     name: nftables
     state: latest
+    update_cache: yes
 
 - name: Ensure NAT is enabled in nftables configuration
   blockinfile:
