@@ -10,7 +10,7 @@
       - curl
       - lynx
       - dnsutils
-      - ldap_utils
+      - ldap-utils
       - ftp
       - lftp
       - wget
