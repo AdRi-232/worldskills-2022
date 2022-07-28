@@ -13,7 +13,7 @@
           }
           chain postrouting {
               type nat hook postrouting priority 100; policy accept;
-		          oifname eth0 masquerade
+              oifname eth0 masquerade
           }
       }
   register: nftables_nat_result
