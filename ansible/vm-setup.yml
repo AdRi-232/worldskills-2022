@@ -3,17 +3,17 @@
   roles:
     - ipv4_forwarding
 
-- hosts: router-l1
+- hosts: router_l1
   become: true
   roles:
     - nftables_nat
 
-- hosts: router-l2
+- hosts: router_l2
   become: true
   roles:
     - nftables_nat
 
-- hosts: router-l3
+- hosts: router_l3
   become: true
   roles:
     - nftables_nat

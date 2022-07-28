@@ -21,15 +21,15 @@
 [linux:vars]
 ansible_user=user
 
-[router-l1]
+[router_l1]
 ; ISP
 10.3.3.1
 
-[router-l2]
+[router_l2]
 ; KR-EDGE
 10.1.1.2
 
-[router-l3]
+[router_l3]
 ; FW
 192.168.10.254
 
@@ -53,6 +53,6 @@ ansible_user=user
 ansible_user=ansible
 ansible_password=Skill39
 
-[win-router]
+[win_router]
 ; FR-EDGE
 172.16.1.254
