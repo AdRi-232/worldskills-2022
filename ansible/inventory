@@ -52,6 +52,8 @@ ansible_user=user
 172.16.1.2
 
 [windows:vars]
+ansible_connection=ssh
+ansible_shell_type=powershell
 ansible_user=ansible
 ansible_password=Skill39
 

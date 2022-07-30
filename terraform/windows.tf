@@ -27,7 +27,7 @@ data "cloudinit_config" "cloudbase_init_config" {
             content_type = "text/x-cfninitdata"
             filename = "cfn-userdata"
             content = "${templatefile("${path.module}/files/network-config.tftpl", {
-                id = sum([4, network.key])
+                id = sum([4, network.key * 2])
                 ip = network.value.ip
                 gw = network.value.gw
             })}"
