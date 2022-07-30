@@ -1,0 +1,9 @@
+- name: Ensure Routing feature is installed
+  ansible.-community.win_feature:
+    name: Routing
+    state: present
+  register: win_feature
+
+- name: Reboot if required by feature install
+  win_reboot:
+  when: win_feature.reboot_required
