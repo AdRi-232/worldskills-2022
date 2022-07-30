@@ -1,5 +1,5 @@
 - name: Ensure Routing feature is installed
-  ansible.-community.win_feature:
+  ansible.windows.win_feature:
     name: Routing
     state: present
   register: win_feature
