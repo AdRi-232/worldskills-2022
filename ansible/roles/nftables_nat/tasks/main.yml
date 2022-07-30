@@ -24,3 +24,9 @@
     name: nftables
     state: restarted
   when: nftables_conf.changed
+
+- name: Ensure the nftables service is set to start at boot
+  service:
+    name: nftables
+    enabled: yes
+  when: nftables_conf.changed
