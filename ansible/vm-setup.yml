@@ -26,3 +26,7 @@
 - hosts: windows
   roles:
     - win_firewall_ping
+
+- hosts: win_router
+  roles:
+    - win_routing_feature
