@@ -19,13 +19,14 @@
       }
   register: nftables_conf
 
-- name: Ensure the nftables service is set to start at boot
-  service:
-    name: nftables
-    enabled: yes
-
 - name: Restart the nftables service
   service:
     name: nftables
     state: restarted
   when: nftables_conf.changed
+
+- name: Ensure the nftables service is set to start at boot
+  service:
+    name: nftables
+    state: started
+    enabled: yes
