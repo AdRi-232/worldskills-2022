@@ -1,0 +1,6 @@
+- name: Ensure Google and Cloudflare DNS servers are configured on all adapters
+  ansible.windows.win_dns_client:
+    adapter_names: '*'
+    dns_servers:
+    - 8.8.8.8
+    - 1.1.1.1

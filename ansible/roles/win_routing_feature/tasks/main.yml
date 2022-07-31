@@ -1,9 +1,17 @@
-- name: Ensure Routing feature is installed
+- name: Ensure necessary features are installed
   ansible.windows.win_feature:
-    name: Routing
+    name:
+      - Routing
+      - RSAT-RemoteAccess-PowerShell
     state: present
-  register: win_feature
+  register: win_features
+
+- name: Ensure the Remote Access service is started and starts at boot
+  ansible.windows.win_service:
+    name: RemoteAccess 
+    start_mode: auto
+    state: started
 
 - name: Reboot if required by feature install
   win_reboot:
-  when: win_feature.reboot_required
+  when: win_features.reboot_required

@@ -26,6 +26,7 @@
 - hosts: windows
   roles:
     - win_firewall_ping
+    - win_internet_dns
 
 - hosts: win_router
   roles:
