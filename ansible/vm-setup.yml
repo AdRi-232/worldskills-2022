@@ -18,6 +18,10 @@
   roles:
     - nftables_nat
 
+- hosts: win_router
+  roles:
+    - win_routing
+
 - hosts: linux
   become: true
   roles:
@@ -27,7 +31,3 @@
   roles:
     - win_firewall_ping
     - win_internet_dns
-
-- hosts: win_router
-  roles:
-    - win_routing
