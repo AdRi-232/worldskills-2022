@@ -15,3 +15,12 @@
 - name: Reboot if required by feature install
   win_reboot:
   when: win_features.reboot_required
+
+- name: Ensure NAT is enabled from the internal network
+  ansible.windows.win_powershell:
+    script: |
+      if ((Get-NetNat).InternalIPInterfaceAddressPrefix -ne "172.16.1.0/24") {
+        New-NetNat -Name NAT -InternalIPInterfaceAddressPrefix "172.16.1.0/24"
+      } else {
+        $Ansible.Changed = $False
+      }

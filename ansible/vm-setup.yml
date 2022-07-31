@@ -30,4 +30,4 @@
 
 - hosts: win_router
   roles:
-    - win_routing_feature
+    - win_routing
