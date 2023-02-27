@@ -72,3 +72,8 @@ variable "windows_server_vms" {
     description = "List of Windows-based VMs"
     type = map
 }
+
+variable "debian_vms" {
+    description = "List of Debian-based VMs"
+    type = map
+}
